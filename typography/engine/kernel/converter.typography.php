@@ -71,29 +71,14 @@ class Typography {
 
     // From `'foo'` to `‘foo’` and `"bar"` to `“bar”`
     protected function quote($text) {
-        $text = preg_replace([
-            // single quote
-            '#(?<=^|[^\w!%\)\]\};:,.?])\'(?!$)#',
-            '#(?<!^)\'(?=\W|$)#',
-            // double quote
-            '#(?<=^|[^\w!%\)\]\};:,.?])"(?!$)#',
-            '#(?<!^)"(?=\W|$)#'
-        ], [
-            // single quote
-            $this->q[0],
-            $this->q[1],
-            // double quote
-            $this->Q[0],
-            $this->Q[1]
-        ], $text);
-        // Fix for `foo”‘` and `foo’“`
-        $text = str_replace([
-            $this->Q[1] . $this->q[0],
-            $this->q[1] . $this->Q[0]
-        ], [
-            $this->Q[1] . $this->q[1],
-            $this->q[1] . $this->Q[1]
-        ], $text);
+        // single quote
+        $text = preg_replace_callback('#\B(\')(.*?)\1\B#', function($m) {
+            return implode($m[2], $this->q);
+        }, $text);
+        // double quote
+        $text = preg_replace_callback('#\B(")(.*?)\1\B#', function($m) {
+            return implode($m[2], $this->Q);
+        }, $text);
         // The rest of the quote(s) should be a closing quote(s)
         return str_replace(["'", '"'], [$this->q[1], $this->Q[1]], $text);
     }

@@ -59,6 +59,42 @@ include __DIR__ . '../../../../engine/kernel/converter.typography.php';
 
 $str = [];
 $str[] = <<<EOL
+<p>"Hello, where are you from?"</p>
+<p>"There you are!"</p>
+<p>"WTF?? (What the Fuck)"</p>
+<p>"hello, where are you from."</p>
+<p>"It's about 50%"</p>
+
+<p>Yo "Hello, where are you from?"</p>
+<p>Yo "There you are!"</p>
+<p>Yo "WTF?? (What the Fuck)"</p>
+<p>Yo "hello, where are you from."</p>
+<p>Yo "It's about 50%"</p>
+
+<p>Yo, "Hello, where are you from?"</p>
+<p>Yo, "There you are!"</p>
+<p>Yo, "WTF?? (What the Fuck)"</p>
+<p>Yo, "hello, where are you from."</p>
+<p>Yo, "It's about 50%"</p>
+
+<p>'Hello, where are you from?'</p>
+<p>'There you are!'</p>
+<p>'WTF?? (What the Fuck)'</p>
+<p>'hello, where are you from.'</p>
+<p>'It"s about 50%'</p>
+
+<p>Yo 'Hello, where are you from?'</p>
+<p>Yo 'There you are!'</p>
+<p>Yo 'WTF?? (What the Fuck)'</p>
+<p>Yo 'hello, where are you from.'</p>
+<p>Yo 'It"s about 50%'</p>
+
+<p>Yo, 'Hello, where are you from?'</p>
+<p>Yo, 'There you are!'</p>
+<p>Yo, 'WTF?? (What the Fuck)'</p>
+<p>Yo, 'hello, where are you from.'</p>
+<p>Yo, 'It"s about 50%'</p>
+
 <p>'lorem ipsum dolor sit am\'et</p>
 <p>"lorem ipsum dolor sit am\"et</p>
 
@@ -111,6 +147,43 @@ $str[] = <<<EOL
 <hr>
 
 <div style="white-space:pre-wrap;">
+
+"Hello, where are you from?"
+"There you are!"
+"WTF?? (What the Fuck)"
+"hello, where are you from."
+"It's about 50%"
+
+Yo "Hello, where are you from?"
+Yo "There you are!"
+Yo "WTF?? (What the Fuck)"
+Yo "hello, where are you from."
+Yo "It's about 50%"
+
+Yo, "Hello, where are you from?"
+Yo, "There you are!"
+Yo, "WTF?? (What the Fuck)"
+Yo, "hello, where are you from."
+Yo, "It's about 50%"
+
+'Hello, where are you from?'
+'There you are!'
+'WTF?? (What the Fuck)'
+'hello, where are you from.'
+'It"s about 50%'
+
+Yo 'Hello, where are you from?'
+Yo 'There you are!'
+Yo 'WTF?? (What the Fuck)'
+Yo 'hello, where are you from.'
+Yo 'It"s about 50%'
+
+Yo, 'Hello, where are you from?'
+Yo, 'There you are!'
+Yo, 'WTF?? (What the Fuck)'
+Yo, 'hello, where are you from.'
+Yo, 'It"s about 50%'
+
 'lorem ipsum dolor sit am\'et
 "lorem ipsum dolor sit am\"et
 
@@ -159,42 +232,6 @@ lorem ...ipsum dolor... sit am\...et
 lorem ....ipsum dolor.... sit am\...et
 lorem .....ipsum dolor..... sit am\...et
 lorem ......ipsum dolor...... sit am\...et
-
-"Hello, where are you from?"
-"There you are!"
-"WTF?? (What the Fuck)"
-"hello, where are you from."
-"It's about 50% for each"
-
-Yo "Hello, where are you from?"
-Yo "There you are!"
-Yo "WTF?? (What the Fuck)"
-Yo "hello, where are you from."
-Yo "It's about 50% for each"
-
-Yo, "Hello, where are you from?"
-Yo, "There you are!"
-Yo, "WTF?? (What the Fuck)"
-Yo, "hello, where are you from."
-Yo, "It's about 50% for each"
-
-'Hello, where are you from?'
-'There you are!'
-'WTF?? (What the Fuck)'
-'hello, where are you from.'
-'It"s about 50% for each'
-
-Yo 'Hello, where are you from?'
-Yo 'There you are!'
-Yo 'WTF?? (What the Fuck)'
-Yo 'hello, where are you from.'
-Yo 'It"s about 50% for each'
-
-Yo, 'Hello, where are you from?'
-Yo, 'There you are!'
-Yo, 'WTF?? (What the Fuck)'
-Yo, 'hello, where are you from.'
-Yo, 'It"s about 50% for each'
 </div>
 EOL;
 $str[0] = str_replace("\n\n", "\n", $str[0]);
