@@ -1,16 +1,11 @@
-<?php
+<?php namespace _\page;
 
-require __DIR__ . DS . 'engine' . DS . 'plug' . DS . 'to.php';
-
-function fn_converter_typography_replace($content, $lot) {
-    return To::typography($content);
+function typography($content) {
+    return (new \To\Typography)->apply($content);
 }
 
-Hook::set([
-    'page.title',
-    'page.description',
-    'page.content',
-    'comment.title',
-    'comment.description',
-    'comment.content'
-], 'fn_converter_typography_replace', 2.1);
+\Hook::set([
+    '*.content',
+    '*.description',
+    '*.title',
+], __NAMESPACE__ . "\\typography", 2.1);

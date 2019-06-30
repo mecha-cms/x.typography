@@ -55,7 +55,7 @@ div hr {
   <body>
 <?php
 
-include __DIR__ . '../../../../engine/kernel/converter.typography.php';
+include __DIR__ . '/../../../../engine/kernel/to.typography.php';
 
 $str = [];
 $str[] = <<<EOL
@@ -253,22 +253,22 @@ $str[] = <<<EOL
 <p>What ?</p>
 EOL;
 
-$parser = new Converter\Typography;
+$parser = new To\Typography;
 
 $text = "";
 
 foreach ($str as $v) {
     $text .= '<pre>' . htmlentities($v) . '</pre>';
-    $text .= '<div>' . $parser->run($v) . '</div>';
+    $text .= '<div>' . $parser->apply($v) . '</div>';
     $text .= '<hr>';
     $v = str_replace(' ', '!', $v);
     $v = str_replace('<div!', '<div ', $v);
     $text .= '<pre>' . htmlentities($v) . '</pre>';
-    $text .= '<div>' . $parser->run($v) . '</div>';
+    $text .= '<div>' . $parser->apply($v) . '</div>';
     $text .= '<hr>';
     $v = str_replace(['ipsum', 'dolo'], ['ip<b>s</b>um', 'do<i>l</i>o'], $v);
     $text .= '<pre>' . htmlentities($v) . '</pre>';
-    $text .= '<div>' . $parser->run($v) . '</div>';
+    $text .= '<div>' . $parser->apply($v) . '</div>';
     $text .= '<hr>';
 }
 

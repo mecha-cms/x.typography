@@ -1,4 +1,4 @@
-<?php namespace Converter;
+<?php namespace To;
 
 // Author: Taufik Nurrohman <https://github.com/tovic>
 
@@ -22,8 +22,8 @@ class Typography {
     // Skip parsing process if we are in these HTML tag(s)
     public $ignore = 'code|kbd|math|pre|script|style|textarea';
 
-    // Run converter…
-    public function run($text) {
+    // Apply converter…
+    public function apply($text) {
         if (trim($text) === "") return $text;
         $s = '#(<\/?[-:\w]+(?:\s[^<>]+?)?>)#';
         $parts = preg_split($s, $text, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
