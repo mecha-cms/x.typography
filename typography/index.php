@@ -31,8 +31,10 @@ function typography($content) {
             continue;
         }
         $n = \trim(\explode(' ', \strstr(\substr($v, 1), '>', true), 2)[0], '/');
-        if ('<' === $v[0] && '>' === \substr($v, -1) && isset($tags[$n])) {
-            // Do nothing!
+        if (0 === \strpos($v, '<!--') && '-->' === \substr($v, -3)) {
+            // ~
+        } else if ('<' === $v[0] && '>' === \substr($v, -1) && isset($tags[$n])) {
+            // ~
         } else {
             $v = \strtr($v, [
                 // Normalize HTML entit(y|ies)
