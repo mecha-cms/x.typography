@@ -9,3 +9,4 @@ Release Notes
 ### 2.2.0
 
  - Convert `10 x 10` to `10 × 10`.
+ - Convert text in `summary` and `title` attributes as well.
