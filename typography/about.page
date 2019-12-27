@@ -2,16 +2,20 @@
 title: Typography
 description: Smart punctuation converter.
 author: Taufik Nurrohman
-Version: 2.1.0
+version: 2.2.0
+
+use:
+  '.\lot\x\page': 1
 ...
 
-This plugin will convert some plain ASCII punctuation characters into “smart” punctuation HTML entities:
+This extension converts some plain ASCII punctuation characters into “smart” punctuation HTML entities:
 
- - Convert straight quotes (`'` and `"`) into “curly” quote HTML entities
- - Convert dashes (`--` and `---`) into ‘en-dash’ and ‘em-dash’ HTML entities
- - Convert three consecutive dots (`...`) into an ‘ellipsis’ HTML entity.
+ - Convert straight quotes (`'` and `"`) into ‘curly’ quote HTML entities.
+ - Convert dashes (`--` and `---`) into ‘en-dash’ and ‘em-dash’ HTML entities.
+ - Convert three consecutive dots (`...`) into an ‘ellipsis’ HTML entities.
+ - Convert `x` between numbers into a ‘times’ HTML entities.
 
-This plugin will not modify characters within `<pre>`, `<code>`, `<kbd>` or `<script>` tag block because these tags are commonly used to display text where smart quotes and other “smart punctuation” would not be appropriate, such as source code or example markup.
+This extension will not modify characters within `<pre>`, `<code>`, `<kbd>`, `<script>`, `<style>` and `<textarea>` elements because these elements are commonly used to display text where smart quotes and other “smart punctuation” would not be appropriate, such as in source code or example markup.
 
 #### Before
 
@@ -24,7 +28,3 @@ He said, "Some text with \'escaped quotes\'... Hey, what's your name?"
 ~~~ .txt
 He said, “Some text with 'escaped quotes'… Hey, what’s your name?”
 ~~~
-
-[Test](/lot/x/plugin/lot/typography/lot/asset/php/test.php) {.button target="_blank"}
-
-<!-- block:donate -->
