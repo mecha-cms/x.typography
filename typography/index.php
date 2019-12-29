@@ -52,7 +52,7 @@ function typography($content) {
     // Skip parsing process if we are in these HTML element(s)
     $tags = [
         'pre' => 1,
-        'code' => 1,
+        'code' => 1, // Must come after `pre`
         'kbd' => 1,
         'math' => 1,
         'script' => 1,
@@ -73,8 +73,8 @@ function typography($content) {
         if (0 === \strpos($v, '<!--') && '-->' === \substr($v, -3)) {
             // ~
         } else if ('<' === $v[0] && '>' === \substr($v, -1)) {
-            if (false !== \strpos($v, ' summary=') || false !== \strpos($v, ' title=')) {
-                $v = \preg_replace_callback('/ (summary|title)=(["\'])(.*?)\2/', function($m) use(&$convert) {
+            if (false !== \strpos($v, '=')) {
+                $v = \preg_replace_callback('/ (alt|summary|title)=(["\'])(.*?)\2/', function($m) use(&$convert) {
                     return ' ' . $m[1] . '=' . $m[2] . $convert($m[3], 0) . $m[2];
                 }, $v);
             }
