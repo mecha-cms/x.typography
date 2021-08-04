@@ -1,7 +1,7 @@
-Typography Extension for Mecha
-==============================
+Typography Extension for [Mecha](https://github.com/mecha-cms/mecha)
+====================================================================
 
-> Inspired by the **SmartyPants** plugin created by [John Gruber](http://daringfireball.net/projects/smartypants "John Gruber’s Website").
+Inspired by the **SmartyPants** plugin created by [John Gruber](http://daringfireball.net/projects/smartypants "John Gruber’s Website").
 
 Release Notes
 -------------
