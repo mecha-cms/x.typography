@@ -6,6 +6,10 @@ Inspired by the **SmartyPants** plugin created by [John Gruber](http://daringfir
 Release Notes
 -------------
 
+### 2.2.1
+
+ - [@mecha-cms/mecha#96](https://github.com/mecha-cms/mecha/issues/96)
+
 ### 2.2.0
 
  - Convert `10 x 10` to `10 × 10`.

@@ -1,4 +1,4 @@
-<?php namespace _\lot\x;
+<?php namespace x;
 
 function typography($content) {
     if ("" === \trim($content)) {

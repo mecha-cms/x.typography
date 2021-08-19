@@ -2,7 +2,7 @@
 title: Typography
 description: Smart punctuation converter.
 author: Taufik Nurrohman
-version: 2.2.0
+version: 2.2.1
 
 use:
   '.\lot\x\page': 1
