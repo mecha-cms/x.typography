@@ -1,20 +1,22 @@
 ---
 title: Typography
 description: Smart punctuation converter.
+icon: 'M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z'
+color: '#9d34b7'
 author: Taufik Nurrohman
 version: 2.3.0
 ...
 
-This extension converts some plain ASCII punctuation characters into “smart” punctuation HTML entities:
+This extension converts some simple ASCII punctuation sequences into “smart” punctuation HTML entities:
 
- - Convert straight quotes (`'` and `"`) into ‘curly’ quote HTML entities.
- - Convert dashes (`--` and `---`) into ‘en-dash’ and ‘em-dash’ HTML entities.
- - Convert three consecutive dots (`...`) into an ‘ellipsis’ HTML entities.
- - Convert `x` between numbers into a ‘times’ HTML entities.
+ - Converts straight quotes (`'` and `"`) into ‘curly’ quote HTML entities.
+ - Converts dashes (`--` and `---`) into ‘en-dash’ and ‘em-dash’ HTML entities.
+ - Converts three consecutive dots (`...`) into an ‘ellipsis’ HTML entities.
+ - Converts `x` between numbers into a ‘times’ HTML entities.
 
 This extension will not modify characters within `<pre>`, `<code>`, `<kbd>`, `<script>`, `<style>` and `<textarea>`
 elements because these elements are commonly used to display text where smart quotes and other “smart punctuation” would
-not be appropriate, such as in source code or example markup.
+not be appropriate, such as in source code or sample markup.
 
 #### Before
 

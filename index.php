@@ -5,27 +5,27 @@ function typography($content) {
         return $content;
     }
     $convert = static function ($v, $reset = 1) {
-        // Single and double quote [o, c, oo, cc]
+        // Single and double quote
         $Q = ['‘', '’', '“', '”'];
-        // Dash [n, m]
+        // Dash
         $D = ['–', '—'];
-        // Ellipsis [h]
+        // Ellipsis
         $E = ['…'];
-        // Math [x]
+        // Math
         $M = ['×'];
         if ($reset) {
             $v = \strtr($v, [
                 // Normalize HTML entit(y|ies)
                 '&#34;' => '"',
                 '&#39;' => "'",
-                '&quot;' => '"',
                 '&apos;' => "'",
+                '&quot;' => '"',
                 // Ignore escape sequence(s)
-                "\\\\" => '&#92;',
-                "\\\"" => '&#34;',
                 "\\'" => '&#39;',
-                "\\." => '&#46;',
                 "\\-" => '&#45;',
+                "\\." => '&#46;',
+                "\\\"" => '&#34;',
+                "\\\\" => '&#92;',
                 "\\`" => '&#96;'
             ]);
         }
@@ -43,8 +43,8 @@ function typography($content) {
         $v = \preg_replace_callback('/\B(")(.*?)\1\B/', static function ($m) use ($Q) {
             return $Q[2] . $m[2] . $Q[3];
         }, $v);
-        // Rest of the quote(s) should be a closing quote(s)
-        $v = \preg_replace(['/\b\'/', '/\b"/'], [$Q[1], $Q[3]], $v);
+        // Convert single quote(s) in a word
+        $v = \preg_replace(['/\B\'/', '/\'\B/', '/\b\'\b/'], [$Q[0], $Q[1], $Q[1]], $v);
         // `10x10` to `10×10`
         $v = \preg_replace('/(-?(?:\d*[.,])?\d+)(\s*)x(\s*)(-?(?:\d*[.,])?\d+)/', '$1$2' . $M[0] . '$3$4', $v);
         return $v;
@@ -64,7 +64,7 @@ function typography($content) {
             $v = '<' . $k . '(?:\s[^>]*)?>[\s\S]*?<\/' . $k . '>';
         }
         return $tags;
-    })($tags)) . '|<[^>\s]+(?:\s[^>]*)?>)/', $content, null, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
+    })($tags)) . '|<[^>\s]+(?:\s[^>]*)?>)/', $content, -1, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
     $out = "";
     foreach ($parts as $v) {
         if ("" === $v) {
@@ -91,3 +91,7 @@ function typography($content) {
     'page.description',
     'page.title',
 ], __NAMESPACE__ . "\\typography", 2.1);
+
+if (\defined("\\TEST") && 'x.typography' === \TEST && \is_file($test = __DIR__ . \D . 'test.php')) {
+    require $test;
+}
