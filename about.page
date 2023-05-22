@@ -2,10 +2,7 @@
 title: Typography
 description: Smart punctuation converter.
 author: Taufik Nurrohman
-version: 2.2.1
-
-use:
-  '.\lot\x\page': 1
+version: 2.3.0
 ...
 
 This extension converts some plain ASCII punctuation characters into “smart” punctuation HTML entities:
@@ -15,7 +12,9 @@ This extension converts some plain ASCII punctuation characters into “smart”
  - Convert three consecutive dots (`...`) into an ‘ellipsis’ HTML entities.
  - Convert `x` between numbers into a ‘times’ HTML entities.
 
-This extension will not modify characters within `<pre>`, `<code>`, `<kbd>`, `<script>`, `<style>` and `<textarea>` elements because these elements are commonly used to display text where smart quotes and other “smart punctuation” would not be appropriate, such as in source code or example markup.
+This extension will not modify characters within `<pre>`, `<code>`, `<kbd>`, `<script>`, `<style>` and `<textarea>`
+elements because these elements are commonly used to display text where smart quotes and other “smart punctuation” would
+not be appropriate, such as in source code or example markup.
 
 #### Before
 

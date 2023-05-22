@@ -1,10 +1,10 @@
 <?php namespace x;
 
 function typography($content) {
-    if ("" === \trim($content)) {
+    if (!$content) {
         return $content;
     }
-    $convert = function($v, $reset = 1) {
+    $convert = static function ($v, $reset = 1) {
         // Single and double quote [o, c, oo, cc]
         $Q = ['‘', '’', '“', '”'];
         // Dash [n, m]
@@ -36,11 +36,11 @@ function typography($content) {
             '--' => $D[0]
         ]);
         // Convert single quote(s)
-        $v = \preg_replace_callback('/\B(\')(.*?)\1\B/', function($m) use($Q) {
+        $v = \preg_replace_callback('/\B(\')(.*?)\1\B/', static function ($m) use ($Q) {
             return $Q[0] . $m[2] . $Q[1];
         }, $v);
         // Convert double quote(s)
-        $v = \preg_replace_callback('/\B(")(.*?)\1\B/', function($m) use($Q) {
+        $v = \preg_replace_callback('/\B(")(.*?)\1\B/', static function ($m) use ($Q) {
             return $Q[2] . $m[2] . $Q[3];
         }, $v);
         // Rest of the quote(s) should be a closing quote(s)
@@ -59,7 +59,7 @@ function typography($content) {
         'style' => 1,
         'textarea' => 1
     ];
-    $parts = \preg_split('/(<!--[\s\S]*?-->|' . \implode('|', (function($tags) {
+    $parts = \preg_split('/(<!--[\s\S]*?-->|' . \implode('|', (static function ($tags) {
         foreach ($tags as $k => &$v) {
             $v = '<' . $k . '(?:\s[^>]*)?>[\s\S]*?<\/' . $k . '>';
         }
@@ -74,7 +74,7 @@ function typography($content) {
             // ~
         } else if ('<' === $v[0] && '>' === \substr($v, -1)) {
             if (false !== \strpos($v, '=')) {
-                $v = \preg_replace_callback('/ (alt|summary|title)=(["\'])(.*?)\2/', function($m) use(&$convert) {
+                $v = \preg_replace_callback('/ (aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\2/', static function ($m) use (&$convert) {
                     return ' ' . $m[1] . '=' . $m[2] . $convert($m[3], 0) . $m[2];
                 }, $v);
             }
