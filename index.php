@@ -4,53 +4,71 @@ function typography($content) {
     if (!$content) {
         return $content;
     }
-    $convert = static function ($v, $reset = 1) {
-        // Single and double quote
-        $Q = ['‘', '’', '“', '”'];
-        // Dash
-        $D = ['–', '—'];
-        // Ellipsis
-        $E = ['…'];
-        // Math
-        $M = ['×'];
-        if ($reset) {
-            $v = \strtr($v, [
-                // Normalize HTML entit(y|ies)
+    $convert = static function (string $content, $n) use (&$convert) {
+        $dash = ['–', '—'];
+        $dot = ['…'];
+        $quote = ['‘', '’', '“', '”'];
+        $x = ['×'];
+        if ($n) {
+            // Normalize HTML entity
+            $content = \strtr($content, [
                 '&#34;' => '"',
                 '&#39;' => "'",
                 '&apos;' => "'",
                 '&quot;' => '"',
-                // Ignore escape sequence(s)
-                "\\'" => '&#39;',
-                "\\-" => '&#45;',
-                "\\." => '&#46;',
-                "\\\"" => '&#34;',
-                "\\\\" => '&#92;',
-                "\\`" => '&#96;'
             ]);
         }
-        // Convert dash(es) and ellipsis
-        $v = \strtr($v, [
-            '...' => $E[0],
-            '---' => $D[1],
-            '--' => $D[0]
+        // Convert dash and dot sequence
+        $content = \strtr($content, [
+            '--' => $dash[1],
+            '---' => $dash[1],
+            '...' => $dot[0]
         ]);
-        // Convert single quote(s)
-        $v = \preg_replace_callback('/\B(\')(.*?)\1\B/', static function ($m) use ($Q) {
-            return $Q[0] . $m[2] . $Q[1];
-        }, $v);
-        // Convert double quote(s)
-        $v = \preg_replace_callback('/\B(")(.*?)\1\B/', static function ($m) use ($Q) {
-            return $Q[2] . $m[2] . $Q[3];
-        }, $v);
-        // Convert single quote(s) in a word
-        $v = \preg_replace(['/\B\'/', '/\'\B/', '/\b\'\b/'], [$Q[0], $Q[1], $Q[1]], $v);
-        // `10x10` to `10×10`
-        $v = \preg_replace('/(-?(?:\d*[.,])?\d+)(\s*)x(\s*)(-?(?:\d*[.,])?\d+)/', '$1$2' . $M[0] . '$3$4', $v);
-        return $v;
+        $parts = (array) \preg_split('/(' . \implode('|', [
+            // `"asdf <asdf> asdf asdf"`
+            '(?<!\\\\)"(?:<(?:"[^"]*"|\'[^\']*\'|[^>])+>|[^\n])*?"',
+            // `'asdf <asdf> asdf asdf'`
+            '(?<!\\\\)\'(?:<(?:"[^"]*"|\'[^\']*\'|[^>])+>|[^\n])*?\'',
+            // `<asdf>`
+            '<(?:"[^"]*"|\'[^\']*\'|[^>])+>'
+        ]) . ')/', $content, -1, \PREG_SPLIT_DELIM_CAPTURE | \PREG_SPLIT_NO_EMPTY);
+        $content = "";
+        foreach ($parts as $part) {
+            if ("'" === $part[0] && "'" === \substr($part, -1)) {
+                $content .= $quote[0] . $convert(\substr($part, 1, -1), true) . $quote[1];
+                continue;
+            }
+            if ('"' === $part[0] && '"' === \substr($part, -1)) {
+                $content .= $quote[2] . $convert(\substr($part, 1, -1), true) . $quote[3];
+                continue;
+            }
+            if ('<' === $part[0] && '>' === \substr($part, -1) && false !== \strpos($part, '=')) {
+                $content .= \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) use ($convert) {
+                    return $m[1] . $m[2] . '=' . $m[3] . $convert($m[4], false) . $m[3];
+                }, $part);
+                continue;
+            }
+            // `‘asdf` to `‘asdf`, `asdf’` to `asdf’`, `asdf’s` to `asdf’s`
+            $part = \preg_replace(["/\\B(?<!\\\\)'\\b/", "/\\b'(?!\\\\)\\B/", "/\\b'\\b/"], [$quote[0], $quote[1], $quote[1]], $part);
+            // `10x10` to `10×10`
+            $part = \preg_replace('/(-?(?:\d*[.,])?\d+)(\s*)x(\s*)(-?(?:\d*[.,])?\d+)/', '$1$2' . $x[0] . '$3$4', $part);
+            // `10-20` to `10–20`
+            $part = \preg_replace('/(-?(?:\d*[.,])?\d+)(\s*)-(\s*)(-?(?:\d*[.,])?\d+)/', '$1$2' . $dash[0] . '$3$4', $part);
+            $content .= \strtr($part, [
+                '\\"' => '"',
+                '\\\'' => "'"
+            ]);
+        }
+        return $content;
     };
     // Skip parsing process if we are in these HTML element(s)
-    $tags = [
+    $parts = (array) \preg_split('/(<!--[\s\S]*?-->|' . \implode('|', (static function ($tags) {
+        foreach ($tags as $k => &$tag) {
+            $tag = '<' . \x($k) . '(?:\s[\p{L}\p{N}_:-]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\/>]*))?)*>(?:(?R)|[\s\S])*?<\/' . \x($k) . '>';
+        }
+        unset($tag);
+        return $tags;
+    })([
         'pre' => 1,
         'code' => 1, // Must come after `pre`
         'kbd' => 1,
@@ -58,32 +76,29 @@ function typography($content) {
         'script' => 1,
         'style' => 1,
         'textarea' => 1
-    ];
-    $parts = \preg_split('/(<!--[\s\S]*?-->|' . \implode('|', (static function ($tags) {
-        foreach ($tags as $k => &$v) {
-            $v = '<' . $k . '(?:\s[^>]*)?>[\s\S]*?<\/' . $k . '>';
-        }
-        return $tags;
-    })($tags)) . '|<[^>\s]+(?:\s[^>]*)?>)/', $content, -1, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
-    $out = "";
-    foreach ($parts as $v) {
-        if ("" === $v) {
+    ])) . '|https?:\/\/\S+)/', $content, -1, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
+    $content = "";
+    foreach ($parts as $part) {
+        if ("\\" === $part[0]) {
+            $content .= \substr($part, 1);
             continue;
         }
-        if (0 === \strpos($v, '<!--') && '-->' === \substr($v, -3)) {
-            // ~
-        } else if ('<' === $v[0] && '>' === \substr($v, -1)) {
-            if (false !== \strpos($v, '=')) {
-                $v = \preg_replace_callback('/ (aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\2/', static function ($m) use (&$convert) {
-                    return ' ' . $m[1] . '=' . $m[2] . $convert($m[3], 0) . $m[2];
-                }, $v);
-            }
-        } else {
-            $v = $convert($v);
+        if (0 === \strpos($part, 'http://') || 0 === \strpos($part, 'https://')) {
+            $content .= $part; // Is an URL, skip!
+            continue;
         }
-        $out .= $v;
+        if ($part && '<' === $part[0] && '>' === \substr($part, -1)) {
+            if (false !== \strpos($part, '=')) {
+                $part = \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) use ($convert) {
+                    return $m[1] . $m[2] . '=' . $m[3] . $convert($m[4], false) . $m[3];
+                }, $part);
+            }
+            $content .= $part; // Is a HTML tag or comment, skip!
+            continue;
+        }
+        $content .= $convert($part, true);
     }
-    return $out;
+    return "" !== $content ? $content : null;
 }
 
 \Hook::set([
