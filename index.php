@@ -48,7 +48,7 @@ function typography($content) {
                 }, $part);
                 continue;
             }
-            // `‘asdf` to `‘asdf`, `asdf’` to `asdf’`, `asdf’s` to `asdf’s`
+            // `'asdf` to `‘asdf`, `asdf'` to `asdf’`, `asdf's` to `asdf’s`
             $part = \preg_replace(["/\\B(?<!\\\\)'\\b/", "/\\b'(?!\\\\)\\B/", "/\\b'\\b/"], [$quote[0], $quote[1], $quote[1]], $part);
             // `10x10` to `10×10`
             $part = \preg_replace('/(-?(?:\d*[.,])?\d+)(\s*)x(\s*)(-?(?:\d*[.,])?\d+)/', '$1$2' . $x[0] . '$3$4', $part);
