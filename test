@@ -50,6 +50,8 @@ asdf 100-200 asdf
 <!-- asdf asdf "asdf" -->
 <!-- asdf asdf 'asdf' -->
 
+http://example.com?asdf=asdf's+asdf
+
 asdf "<asdf title="asdf's asdf">asdf's</asdf> asdf" asdf asdf...
 
 asdf '<asdf asdf="asdf" asdf='asdf'>asdf asdf' asdf
