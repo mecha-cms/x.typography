@@ -26,13 +26,21 @@ asdf '<asdf>asdf asdf</asdf>' asdf
 asdf <asdf>asdf 'asdf</asdf> asdf' asdf
 asdf 'asdf <asdf>asdf' asdf</asdf> asdf
 
+asdf '<asdf asdf="asdf" asdf='asdf'>asdf asdf' asdf
+asdf 'asdf asdf<asdf asdf="asdf" asdf='asdf'>' asdf
+asdf '<asdf asdf="asdf" asdf='asdf'>asdf asdf</asdf>' asdf
+asdf <asdf asdf="asdf" asdf='asdf'>asdf 'asdf</asdf> asdf' asdf
+asdf 'asdf <asdf asdf="asdf" asdf='asdf'>asdf' asdf</asdf> asdf
+
 asdf 'asdf asdf
 asdf a'sdf asdf
 asdf asdf' asdf
-asdf asdf ' asdf
 
-asdf '' asdf
+asdf asdf ' asdf
+asdf asdf " asdf
+
 asdf "" asdf
+asdf '' asdf
 
 asdf asdf asdf...
 
@@ -45,6 +53,10 @@ asdf 1024x768 asdf
 
 <img alt="100x100" aria-description="asdf's asdf" aria-label="asdf's asdf" src="/asdf.jpg" title='asdf "asdf" asdf'>
 
+<pre title="asdf's asdf"><code title="asdf's asdf">&lt;p title="asdf's asdf"&gt;
+  asdf asdf's <a href="?asdf=asdf's+asdf" title="asdf's asdf">asdf</a>
+&lt;/p&gt;</code></pre>
+
 asdf 100-200 asdf
 
 <!-- asdf asdf "asdf" -->
@@ -53,12 +65,6 @@ asdf 100-200 asdf
 http://example.com?asdf=asdf's+asdf
 
 asdf "<asdf title="asdf's asdf">asdf's</asdf> asdf" asdf asdf...
-
-asdf '<asdf asdf="asdf" asdf='asdf'>asdf asdf' asdf
-asdf 'asdf asdf<asdf asdf="asdf" asdf='asdf'>' asdf
-asdf '<asdf asdf="asdf" asdf='asdf'>asdf asdf</asdf>' asdf
-asdf <asdf asdf="asdf" asdf='asdf'>asdf 'asdf</asdf> asdf' asdf
-asdf 'asdf <asdf asdf="asdf" asdf='asdf'>asdf' asdf</asdf> asdf
 
 asdf \'asdf asdf asdf\' asdf
 

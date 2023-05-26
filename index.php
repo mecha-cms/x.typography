@@ -1,10 +1,7 @@
-<?php namespace x;
+<?php
 
-function typography($content) {
-    if (!$content) {
-        return $content;
-    }
-    $convert = static function (string $content, $n) use (&$convert) {
+namespace x\typography {
+    function from(string $content, $n) {
         $dash = ['–', '—'];
         $dot = ['…'];
         $quote = ['‘', '’', '“', '”'];
@@ -35,16 +32,16 @@ function typography($content) {
         $content = "";
         foreach ($parts as $part) {
             if ("'" === $part[0] && "'" === \substr($part, -1)) {
-                $content .= $quote[0] . $convert(\substr($part, 1, -1), true) . $quote[1];
+                $content .= $quote[0] . \x\typography\from(\substr($part, 1, -1), true) . $quote[1];
                 continue;
             }
             if ('"' === $part[0] && '"' === \substr($part, -1)) {
-                $content .= $quote[2] . $convert(\substr($part, 1, -1), true) . $quote[3];
+                $content .= $quote[2] . \x\typography\from(\substr($part, 1, -1), true) . $quote[3];
                 continue;
             }
             if ('<' === $part[0] && '>' === \substr($part, -1) && false !== \strpos($part, '=')) {
-                $content .= \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) use ($convert) {
-                    return $m[1] . $m[2] . '=' . $m[3] . $convert($m[4], false) . $m[3];
+                $content .= \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) {
+                    return $m[1] . $m[2] . '=' . $m[3] . \x\typography\from($m[4], false) . $m[3];
                 }, $part);
                 continue;
             }
@@ -60,53 +57,60 @@ function typography($content) {
             ]);
         }
         return $content;
-    };
-    // Skip parsing process if we are in these HTML element(s)
-    $parts = (array) \preg_split('/(<!--[\s\S]*?-->|' . \implode('|', (static function ($tags) {
-        foreach ($tags as $k => &$tag) {
-            $tag = '<' . \x($k) . '(?:\s[\p{L}\p{N}_:-]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\/>]*))?)*>(?:(?R)|[\s\S])*?<\/' . \x($k) . '>';
-        }
-        unset($tag);
-        return $tags;
-    })([
-        'pre' => 1,
-        'code' => 1, // Must come after `pre`
-        'kbd' => 1,
-        'math' => 1,
-        'script' => 1,
-        'style' => 1,
-        'textarea' => 1
-    ])) . '|https?:\/\/\S+)/', $content, -1, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
-    $content = "";
-    foreach ($parts as $part) {
-        if ("\\" === $part[0]) {
-            $content .= \substr($part, 1);
-            continue;
-        }
-        if (0 === \strpos($part, 'http://') || 0 === \strpos($part, 'https://')) {
-            $content .= $part; // Is an URL, skip!
-            continue;
-        }
-        if ($part && '<' === $part[0] && '>' === \substr($part, -1)) {
-            if (false !== \strpos($part, '=')) {
-                $part = \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) use ($convert) {
-                    return $m[1] . $m[2] . '=' . $m[3] . $convert($m[4], false) . $m[3];
-                }, $part);
-            }
-            $content .= $part; // Is a HTML tag or comment, skip!
-            continue;
-        }
-        $content .= $convert($part, true);
     }
-    return "" !== $content ? $content : null;
 }
 
-\Hook::set([
-    'page.content',
-    'page.description',
-    'page.title',
-], __NAMESPACE__ . "\\typography", 2.1);
+namespace x {
+    function typography($content) {
+        if (!$content) {
+            return $content;
+        }
+        // Skip parsing process if we are in these HTML element(s)
+        $parts = (array) \preg_split('/(<!--[\s\S]*?-->|' . \implode('|', (static function ($tags) {
+            foreach ($tags as $k => &$tag) {
+                $tag = '<' . \x($k) . '(?:\s[\p{L}\p{N}_:-]+(?:=(?:"[^"]*"|\'[^\']*\'|[^\/>]*))?)*>(?:(?R)|[\s\S])*?<\/' . \x($k) . '>';
+            }
+            unset($tag);
+            return $tags;
+        })([
+            'pre' => 1,
+            'code' => 1, // Must come after `pre`
+            'kbd' => 1,
+            'math' => 1,
+            'script' => 1,
+            'style' => 1,
+            'textarea' => 1
+        ])) . '|https?:\/\/\S+)/', $content, -1, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
+        $content = "";
+        foreach ($parts as $part) {
+            if (0 === \strpos($part, 'http://') || 0 === \strpos($part, 'https://')) {
+                $content .= $part; // Is an URL, skip!
+                continue;
+            }
+            if ($part && '<' === $part[0] && '>' === \substr($part, -1)) {
+                if (false !== \strpos($part, '=')) {
+                    $part = \preg_replace_callback('/<([\p{L}\p{N}_:-]+)(\s(?:"[^"]*"|\'[^\']*\'|[^>])*)?>/', static function ($m) {
+                        return '<' . $m[1] . \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) {
+                            return $m[1] . $m[2] . '=' . $m[3] . \x\typography\from($m[4], false) . $m[3];
+                        }, $m[2]) . '>';
+                    }, $part);
+                }
+                $content .= $part; // Is a HTML tag or comment, skip!
+                continue;
+            }
+            $content .= \x\typography\from($part, true);
+        }
+        return "" !== $content ? $content : null;
+    }
+    \Hook::set([
+        'page.content',
+        'page.description',
+        'page.title',
+    ], __NAMESPACE__ . "\\typography", 2.1);
+}
 
-if (\defined("\\TEST") && 'x.typography' === \TEST && \is_file($test = __DIR__ . \D . 'test.php')) {
-    require $test;
+namespace {
+    if (\defined("\\TEST") && 'x.typography' === \TEST && \is_file($test = __DIR__ . \D . 'test.php')) {
+        require $test;
+    }
 }
