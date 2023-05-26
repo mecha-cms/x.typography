@@ -92,7 +92,7 @@ namespace x {
                     $part = \preg_replace_callback('/<([\p{L}\p{N}_:-]+)(\s(?:"[^"]*"|\'[^\']*\'|[^>])*)?>/', static function ($m) {
                         return '<' . $m[1] . \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) {
                             return $m[1] . $m[2] . '=' . $m[3] . \x\typography\from($m[4], false) . $m[3];
-                        }, $m[2]) . '>';
+                        }, $m[2] ?? "") . '>';
                     }, $part);
                 }
                 $content .= $part; // Is a HTML tag or comment, skip!
