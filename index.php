@@ -29,7 +29,7 @@ namespace x\typography {
             }
             if ($part && '<' === $part[0] && '>' === \substr($part, -1)) {
                 if (false !== \strpos($part, '=')) {
-                    $part = \preg_replace_callback('/<([\p{L}\p{N}_:-]+)(\s(?:"[^"]*"|\'[^\']*\'|[^>])*)?>/', static function ($m) {
+                    $part = \preg_replace_callback('/<([\p{L}\p{N}_:-]+)(\s(?:"[^"]*"|\'[^\']*\'|[^>]+)*)?>/', static function ($m) {
                         return '<' . $m[1] . \preg_replace_callback('/(\s+)(aria-(?:description|label)|alt|summary|title)=(["\'])(.*?)\3/i', static function ($m) {
                             return $m[1] . $m[2] . '=' . $m[3] . \x\typography\from($m[4], false) . $m[3];
                         }, $m[2] ?? "") . '>';
