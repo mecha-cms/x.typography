@@ -1,6 +1,6 @@
 <?php
 
-namespace x\typography {
+namespace x\typography\page {
     function content($content) {
         if (!$content) {
             return $content;
@@ -42,6 +42,18 @@ namespace x\typography {
         }
         return "" !== $content ? $content : null;
     }
+    function description($description) {
+        return \fire(__NAMESPACE__ . "\\content", [$description], $this);
+    }
+    function title($title) {
+        return \fire(__NAMESPACE__ . "\\content", [$title], $this);
+    }
+    \Hook::set('page.content', __NAMESPACE__ . "\\content", 2.1);
+    \Hook::set('page.description', __NAMESPACE__ . "\\description", 2.1);
+    \Hook::set('page.title', __NAMESPACE__ . "\\title", 2.1);
+}
+
+namespace x\typography {
     function from(string $content, $n) {
         $dash = ['–', '—'];
         $dot = ['…'];
@@ -99,11 +111,6 @@ namespace x\typography {
         }
         return $content;
     }
-    \Hook::set([
-        'page.content',
-        'page.description',
-        'page.title',
-    ], __NAMESPACE__ . "\\content", 2.1);
 }
 
 namespace {
